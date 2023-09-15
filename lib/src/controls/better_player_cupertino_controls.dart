@@ -539,6 +539,15 @@ class _BetterPlayerCupertinoControlsState
             )
           else
             const SizedBox(),
+          Material(
+            child: IconButton(
+              onPressed: () {
+                /// TODO: execute the action from the controller
+              },
+              icon: Icon(Icons.close),
+              color: Colors.white,
+            ),
+          )
         ],
       ),
     );
