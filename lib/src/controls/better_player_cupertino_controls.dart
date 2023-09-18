@@ -312,23 +312,19 @@ class _BetterPlayerCupertinoControlsState
             _controlsConfiguration.onExit!();
           }
         },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-            ),
-            child: Container(
-              height: barHeight,
-              padding: EdgeInsets.symmetric(
-                horizontal: buttonPadding,
-              ),
-              child: Icon(
-                Icons.close,
-                color: iconColor,
-                size: iconSize,
-              ),
-            ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: backgroundColor,
+          ),
+          height: barHeight,
+          padding: EdgeInsets.symmetric(
+            horizontal: buttonPadding,
+          ),
+          child: Icon(
+            Icons.close,
+            color: iconColor,
+            size: iconSize,
           ),
         ),
       ),

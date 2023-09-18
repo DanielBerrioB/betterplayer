@@ -196,30 +196,29 @@ class _BetterPlayerMaterialControlsState
 
     return Row(
       children: [
-        Container(
-          child: (_controlsConfiguration.enableOverflowMenu)
-              ? AnimatedOpacity(
-                  opacity: controlsNotVisible ? 0.0 : 1.0,
-                  duration: _controlsConfiguration.controlsHideTime,
-                  onEnd: _onPlayerHide,
-                  child: Container(
-                    height: _controlsConfiguration.controlBarHeight,
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        if (_controlsConfiguration.enablePip)
-                          _buildPipButtonWrapperWidget(
-                              controlsNotVisible, _onPlayerHide)
-                        else
-                          const SizedBox(),
-                        _buildMoreButton(),
-                      ],
-                    ),
-                  ),
-                )
-              : const SizedBox(),
-        ),
+        const Spacer(),
+        if (_controlsConfiguration.enableOverflowMenu)
+          Expanded(
+            child: AnimatedOpacity(
+              opacity: controlsNotVisible ? 0.0 : 1.0,
+              duration: _controlsConfiguration.controlsHideTime,
+              onEnd: _onPlayerHide,
+              child: Container(
+                height: _controlsConfiguration.controlBarHeight,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (_controlsConfiguration.enablePip)
+                      _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide)
+                    else
+                      const SizedBox(),
+                    _buildMoreButton(),
+                  ],
+                ),
+              ),
+            ),
+          ),
         if (_controlsConfiguration.onExit != null || (betterPlayerController != null && betterPlayerController!.isFullScreen)) ...[
           const SizedBox(width: 4),
           _buildCloseButton(
@@ -228,7 +227,7 @@ class _BetterPlayerMaterialControlsState
             barHeight * 0.8,
             barHeight * 0.4,
             10.0,
-          )
+          ),
         ]
       ],
     );
@@ -295,23 +294,19 @@ class _BetterPlayerMaterialControlsState
             _controlsConfiguration.onExit!();
           }
         },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-            ),
-            child: Container(
-              height: barHeight,
-              padding: EdgeInsets.symmetric(
-                horizontal: buttonPadding,
-              ),
-              child: Icon(
-                Icons.close,
-                color: iconColor,
-                size: iconSize,
-              ),
-            ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          height: barHeight,
+          padding: EdgeInsets.symmetric(
+            horizontal: buttonPadding,
+          ),
+          child: Icon(
+            Icons.close,
+            color: iconColor,
+            size: iconSize,
           ),
         ),
       ),
