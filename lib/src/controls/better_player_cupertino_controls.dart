@@ -305,25 +305,25 @@ class _BetterPlayerCupertinoControlsState
   ) {
     return Material(
       color: Colors.transparent,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: backgroundColor,
-          ),
+      child: GestureDetector(
+        onTap: () {
+          _betterPlayerController?.exitFullScreen();
+          if (_controlsConfiguration.onExit != null) {
+            _controlsConfiguration.onExit!();
+          }
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
           child: Container(
-            height: barHeight,
-            padding: EdgeInsets.symmetric(
-              horizontal: buttonPadding,
+            decoration: BoxDecoration(
+              color: backgroundColor,
             ),
-            child: IconButton(
-              onPressed: () {
-                _betterPlayerController?.exitFullScreen();
-                if (_controlsConfiguration.onExit != null) {
-                  _controlsConfiguration.onExit!();
-                }
-              },
-              icon: Icon(
+            child: Container(
+              height: barHeight,
+              padding: EdgeInsets.symmetric(
+                horizontal: buttonPadding,
+              ),
+              child: Icon(
                 Icons.close,
                 color: iconColor,
                 size: iconSize,
@@ -566,6 +566,7 @@ class _BetterPlayerCupertinoControlsState
               iconSize,
               buttonPadding,
             ),
+          const SizedBox(width: 4),
           if (_controlsConfiguration.onExit != null || (betterPlayerController != null && betterPlayerController!.isFullScreen))
             _buildCloseButton(
               backgroundColor,
