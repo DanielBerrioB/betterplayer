@@ -541,8 +541,12 @@ class _BetterPlayerCupertinoControlsState
             const SizedBox(),
           if (_controlsConfiguration.onExit != null)
             Material(
+              color: Colors.transparent,
               child: IconButton(
-                onPressed: _controlsConfiguration.onExit,
+                onPressed: () {
+                  _betterPlayerController?.exitFullScreen();
+                  _controlsConfiguration.onExit!();
+                },
                 icon: Icon(Icons.close),
                 color: Colors.white,
               ),
