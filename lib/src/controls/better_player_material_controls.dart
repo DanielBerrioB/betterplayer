@@ -187,6 +187,13 @@ class _BetterPlayerMaterialControlsState
       return const SizedBox();
     }
 
+    final backgroundColor = _controlsConfiguration.controlBarColor;
+    final iconColor = _controlsConfiguration.iconsColor;
+    final orientation = MediaQuery.of(context).orientation;
+    final barHeight = orientation == Orientation.portrait
+        ? _controlsConfiguration.controlBarHeight
+        : _controlsConfiguration.controlBarHeight + 10;
+
     return Container(
       child: (_controlsConfiguration.enableOverflowMenu)
           ? AnimatedOpacity(
@@ -206,18 +213,12 @@ class _BetterPlayerMaterialControlsState
                       const SizedBox(),
                     _buildMoreButton(),
                     if (_controlsConfiguration.onExit != null || (betterPlayerController != null && betterPlayerController!.isFullScreen))
-                      Material(
-                        color: Colors.transparent,
-                        child: IconButton(
-                          onPressed: () {
-                            _betterPlayerController?.exitFullScreen();
-                            if (_controlsConfiguration.onExit != null) {
-                              _controlsConfiguration.onExit!();
-                            }
-                          },
-                          icon: Icon(Icons.close),
-                          color: Colors.white,
-                        ),
+                      _buildCloseButton(
+                        backgroundColor,
+                        iconColor,
+                        barHeight * 0.8,
+                        barHeight * 0.4,
+                        10.0,
                       )
                   ],
                 ),
@@ -269,6 +270,42 @@ class _BetterPlayerMaterialControlsState
           return const SizedBox();
         }
       },
+    );
+  }
+
+  ClipRRect _buildCloseButton(
+      Color backgroundColor,
+      Color iconColor,
+      double barHeight,
+      double iconSize,
+      double buttonPadding,
+      ) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+        ),
+        child: Container(
+          height: barHeight,
+          padding: EdgeInsets.symmetric(
+            horizontal: buttonPadding,
+          ),
+          child: IconButton(
+            onPressed: () {
+              _betterPlayerController?.exitFullScreen();
+              if (_controlsConfiguration.onExit != null) {
+                _controlsConfiguration.onExit!();
+              }
+            },
+            icon: Icon(
+              Icons.close,
+              color: iconColor,
+              size: iconSize,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
