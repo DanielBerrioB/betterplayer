@@ -296,35 +296,38 @@ class _BetterPlayerCupertinoControlsState
     );
   }
 
-  ClipRRect _buildCloseButton(
+  Material _buildCloseButton(
     Color backgroundColor,
     Color iconColor,
     double barHeight,
     double iconSize,
     double buttonPadding,
   ) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-        ),
+    return Material(
+      color: Colors.transparent,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
         child: Container(
-          height: barHeight,
-          padding: EdgeInsets.symmetric(
-            horizontal: buttonPadding,
+          decoration: BoxDecoration(
+            color: backgroundColor,
           ),
-          child: IconButton(
-            onPressed: () {
-              _betterPlayerController?.exitFullScreen();
-              if (_controlsConfiguration.onExit != null) {
-                _controlsConfiguration.onExit!();
-              }
-            },
-            icon: Icon(
-              Icons.close,
-              color: iconColor,
-              size: iconSize,
+          child: Container(
+            height: barHeight,
+            padding: EdgeInsets.symmetric(
+              horizontal: buttonPadding,
+            ),
+            child: IconButton(
+              onPressed: () {
+                _betterPlayerController?.exitFullScreen();
+                if (_controlsConfiguration.onExit != null) {
+                  _controlsConfiguration.onExit!();
+                }
+              },
+              icon: Icon(
+                Icons.close,
+                color: iconColor,
+                size: iconSize,
+              ),
             ),
           ),
         ),
