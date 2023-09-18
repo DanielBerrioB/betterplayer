@@ -187,9 +187,19 @@ class _BetterPlayerMaterialControlsState
       return const SizedBox();
     }
 
-    return Container(
-      child: (_controlsConfiguration.enableOverflowMenu)
-          ? AnimatedOpacity(
+    final backgroundColor = _controlsConfiguration.controlBarColor;
+    final iconColor = _controlsConfiguration.iconsColor;
+    final orientation = MediaQuery.of(context).orientation;
+    final barHeight = orientation == Orientation.portrait
+        ? _controlsConfiguration.controlBarHeight
+        : _controlsConfiguration.controlBarHeight + 10;
+
+    return Row(
+      children: [
+        const Spacer(),
+        if (_controlsConfiguration.enableOverflowMenu)
+          Expanded(
+            child: AnimatedOpacity(
               opacity: controlsNotVisible ? 0.0 : 1.0,
               duration: _controlsConfiguration.controlsHideTime,
               onEnd: _onPlayerHide,
@@ -200,16 +210,26 @@ class _BetterPlayerMaterialControlsState
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     if (_controlsConfiguration.enablePip)
-                      _buildPipButtonWrapperWidget(
-                          controlsNotVisible, _onPlayerHide)
+                      _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide)
                     else
                       const SizedBox(),
                     _buildMoreButton(),
                   ],
                 ),
               ),
-            )
-          : const SizedBox(),
+            ),
+          ),
+        if (_controlsConfiguration.onExit != null || (betterPlayerController != null && betterPlayerController!.isFullScreen)) ...[
+          const SizedBox(width: 4),
+          _buildCloseButton(
+            backgroundColor,
+            iconColor,
+            barHeight * 0.8,
+            barHeight * 0.4,
+            10.0,
+          ),
+        ]
+      ],
     );
   }
 
@@ -255,6 +275,42 @@ class _BetterPlayerMaterialControlsState
           return const SizedBox();
         }
       },
+    );
+  }
+
+  Material _buildCloseButton(
+    Color backgroundColor,
+    Color iconColor,
+    double barHeight,
+    double iconSize,
+    double buttonPadding,
+  ) {
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        onTap: () {
+          _betterPlayerController?.exitFullScreen();
+          if (_controlsConfiguration.onExit != null) {
+            _controlsConfiguration.onExit!();
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          height: barHeight,
+          margin: EdgeInsets.only(right: 10.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: buttonPadding,
+          ),
+          child: Icon(
+            Icons.close,
+            color: iconColor,
+            size: iconSize,
+          ),
+        ),
+      ),
     );
   }
 

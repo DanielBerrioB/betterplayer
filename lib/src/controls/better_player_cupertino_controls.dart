@@ -296,6 +296,41 @@ class _BetterPlayerCupertinoControlsState
     );
   }
 
+  Material _buildCloseButton(
+    Color backgroundColor,
+    Color iconColor,
+    double barHeight,
+    double iconSize,
+    double buttonPadding,
+  ) {
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        onTap: () {
+          _betterPlayerController?.exitFullScreen();
+          if (_controlsConfiguration.onExit != null) {
+            _controlsConfiguration.onExit!();
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: backgroundColor,
+          ),
+          height: barHeight,
+          padding: EdgeInsets.symmetric(
+            horizontal: buttonPadding,
+          ),
+          child: Icon(
+            Icons.close,
+            color: iconColor,
+            size: iconSize,
+          ),
+        ),
+      ),
+    );
+  }
+
   GestureDetector _buildMoreButton(
     VideoPlayerController? controller,
     Color backgroundColor,
@@ -497,12 +532,8 @@ class _BetterPlayerCupertinoControlsState
               barHeight,
               iconSize,
               buttonPadding,
-            )
-          else
-            const SizedBox(),
-          const SizedBox(
-            width: 4,
-          ),
+            ),
+          const SizedBox(width: 4),
           if (_controlsConfiguration.enablePip)
             _buildPipButton(
               backgroundColor,
@@ -510,9 +541,7 @@ class _BetterPlayerCupertinoControlsState
               barHeight,
               iconSize,
               buttonPadding,
-            )
-          else
-            const SizedBox(),
+            ),
           const Spacer(),
           if (_controlsConfiguration.enableMute)
             _buildMuteButton(
@@ -522,12 +551,8 @@ class _BetterPlayerCupertinoControlsState
               barHeight,
               iconSize,
               buttonPadding,
-            )
-          else
-            const SizedBox(),
-          const SizedBox(
-            width: 4,
-          ),
+            ),
+          const SizedBox(width: 4),
           if (_controlsConfiguration.enableOverflowMenu)
             _buildMoreButton(
               _controller,
@@ -536,9 +561,16 @@ class _BetterPlayerCupertinoControlsState
               barHeight,
               iconSize,
               buttonPadding,
+            ),
+          const SizedBox(width: 4),
+          if (_controlsConfiguration.onExit != null || (betterPlayerController != null && betterPlayerController!.isFullScreen))
+            _buildCloseButton(
+              backgroundColor,
+              iconColor,
+              barHeight,
+              iconSize,
+              buttonPadding,
             )
-          else
-            const SizedBox(),
         ],
       ),
     );
