@@ -205,13 +205,15 @@ class _BetterPlayerMaterialControlsState
                     else
                       const SizedBox(),
                     _buildMoreButton(),
-                    if (_controlsConfiguration.onExit != null)
+                    if (_controlsConfiguration.onExit != null || (betterPlayerController != null && betterPlayerController!.isFullScreen))
                       Material(
                         color: Colors.transparent,
                         child: IconButton(
                           onPressed: () {
                             _betterPlayerController?.exitFullScreen();
-                            _controlsConfiguration.onExit!();
+                            if (_controlsConfiguration.onExit != null) {
+                              _controlsConfiguration.onExit!();
+                            }
                           },
                           icon: Icon(Icons.close),
                           color: Colors.white,
