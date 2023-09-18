@@ -35,7 +35,9 @@ class _VideoProgressBarState
     extends State<BetterPlayerMaterialVideoProgressBar> {
   _VideoProgressBarState() {
     listener = () {
-      if (mounted) setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
     };
   }
 

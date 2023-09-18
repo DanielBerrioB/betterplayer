@@ -36,7 +36,9 @@ class _VideoProgressBarState
     extends State<BetterPlayerCupertinoVideoProgressBar> {
   _VideoProgressBarState() {
     listener = () {
-      if (mounted) setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
     };
   }
 

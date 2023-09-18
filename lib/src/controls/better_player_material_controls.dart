@@ -300,6 +300,7 @@ class _BetterPlayerMaterialControlsState
             borderRadius: BorderRadius.circular(10.0),
           ),
           height: barHeight,
+          margin: EdgeInsets.only(right: 10.0),
           padding: EdgeInsets.symmetric(
             horizontal: buttonPadding,
           ),
