@@ -161,6 +161,10 @@ class BetterPlayerControlsConfiguration {
   ///Color of text in bottom modal sheet used for overflow menu items.
   final Color overflowModalTextColor;
 
+  ///Callback function for calling when the x button is pressed in the right upper
+  ///corner of the player
+  final VoidCallback? onExit;
+
   const BetterPlayerControlsConfiguration({
     this.controlBarColor = Colors.black87,
     this.textColor = Colors.white,
@@ -188,6 +192,7 @@ class BetterPlayerControlsConfiguration {
     this.controlsHideTime = const Duration(milliseconds: 300),
     this.customControlsBuilder,
     this.playerTheme,
+    this.onExit,
     this.showControls = true,
     this.showControlsOnInitialize = true,
     this.controlBarHeight = 48.0,
@@ -240,8 +245,8 @@ class BetterPlayerControlsConfiguration {
   ///Setup BetterPlayerControlsConfiguration based on Theme options.
   factory BetterPlayerControlsConfiguration.theme(ThemeData theme) {
     return BetterPlayerControlsConfiguration(
-      textColor: theme.textTheme.bodyText1?.color ?? Colors.white,
-      iconsColor: theme.textTheme.button?.color ?? Colors.white,
+      textColor: theme.textTheme.bodyLarge?.color ?? Colors.white,
+      iconsColor: theme.textTheme.labelLarge?.color ?? Colors.white,
     );
   }
 }

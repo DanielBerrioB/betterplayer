@@ -205,6 +205,14 @@ class _BetterPlayerMaterialControlsState
                     else
                       const SizedBox(),
                     _buildMoreButton(),
+                    if (_controlsConfiguration.onExit != null)
+                      Material(
+                        child: IconButton(
+                          onPressed: _controlsConfiguration.onExit,
+                          icon: Icon(Icons.close),
+                          color: Colors.white,
+                        ),
+                      )
                   ],
                 ),
               ),
