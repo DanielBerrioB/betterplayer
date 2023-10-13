@@ -720,18 +720,20 @@ class _BetterPlayerCupertinoControlsState
   }
 
   void _updateState() {
-    if (mounted) {
-      if (!controlsNotVisible ||
-          isVideoFinished(_controller!.value) ||
-          _wasLoading ||
-          isLoading(_controller!.value)) {
+    if (!mounted) return;
+    if (!controlsNotVisible ||
+        isVideoFinished(_controller!.value) ||
+        _wasLoading ||
+        isLoading(_controller!.value)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         setState(() {
           _latestValue = _controller!.value;
           if (isVideoFinished(_latestValue)) {
             changePlayerControlsNotVisible(false);
           }
         });
-      }
+      });
     }
   }
 
