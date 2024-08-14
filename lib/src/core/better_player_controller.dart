@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:better_player/better_player.dart';
-import 'package:better_player/src/configuration/better_player_controller_event.dart';
-import 'package:better_player/src/core/better_player_utils.dart';
-import 'package:better_player/src/subtitles/better_player_subtitle.dart';
-import 'package:better_player/src/subtitles/better_player_subtitles_factory.dart';
-import 'package:better_player/src/video_player/video_player.dart';
-import 'package:better_player/src/video_player/video_player_platform_interface.dart';
+import 'package:better_player_plus/better_player_plus.dart';
+import 'package:better_player_plus/src/configuration/better_player_controller_event.dart';
+import 'package:better_player_plus/src/core/better_player_utils.dart';
+import 'package:better_player_plus/src/subtitles/better_player_subtitle.dart';
+import 'package:better_player_plus/src/subtitles/better_player_subtitles_factory.dart';
+import 'package:better_player_plus/src/video_player/video_player.dart';
+import 'package:better_player_plus/src/video_player/video_player_platform_interface.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -277,11 +277,10 @@ class BetterPlayerController {
 
   ///Configure subtitles based on subtitles source.
   void _setupSubtitles() {
-    _betterPlayerSubtitlesSourceList.add(
-      BetterPlayerSubtitlesSource(type: BetterPlayerSubtitlesSourceType.none),
-    );
     final defaultSubtitle = _betterPlayerSubtitlesSourceList
         .firstWhereOrNull((element) => element.selectedByDefault == true);
+
+    if (defaultSubtitle == null) return;
 
     ///Setup subtitles (none is default)
     setupSubtitleSource(
@@ -413,7 +412,7 @@ class BetterPlayerController {
         }
       }
       _asmsSegmentsLoading = false;
-    } catch (exception) {
+    } on Exception catch (exception) {
       BetterPlayerUtils.log("Load ASMS subtitle segments failed: $exception");
     }
   }

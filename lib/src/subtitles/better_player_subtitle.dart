@@ -1,4 +1,4 @@
-import 'package:better_player/src/core/better_player_utils.dart';
+import 'package:better_player_plus/src/core/better_player_utils.dart';
 
 class BetterPlayerSubtitle {
   static const String timerSeparator = ' --> ';
@@ -16,7 +16,8 @@ class BetterPlayerSubtitle {
 
   factory BetterPlayerSubtitle(String value, bool isWebVTT) {
     try {
-      final scanner = value.split('\n');
+      final scanner =
+          value.split('\n').where((element) => element.isNotEmpty).toList();
       if (scanner.length == 2) {
         return _handle2LinesSubtitles(scanner);
       }
@@ -24,7 +25,7 @@ class BetterPlayerSubtitle {
         return _handle3LinesAndMoreSubtitles(scanner, isWebVTT);
       }
       return BetterPlayerSubtitle._();
-    } catch (exception) {
+    } on Exception catch (_) {
       BetterPlayerUtils.log("Failed to parse subtitle line: $value");
       return BetterPlayerSubtitle._();
     }
@@ -38,8 +39,12 @@ class BetterPlayerSubtitle {
       final texts = scanner.sublist(1, scanner.length);
 
       return BetterPlayerSubtitle._(
-          index: -1, start: start, end: end, texts: texts);
-    } catch (exception) {
+        index: -1,
+        start: start,
+        end: end,
+        texts: texts,
+      );
+    } on Exception catch (_) {
       BetterPlayerUtils.log("Failed to parse subtitle line: $scanner");
       return BetterPlayerSubtitle._();
     }
@@ -65,7 +70,7 @@ class BetterPlayerSubtitle {
       final texts = scanner.sublist(firstLineOfText, scanner.length);
       return BetterPlayerSubtitle._(
           index: index, start: start, end: end, texts: texts);
-    } catch (exception) {
+    } on Exception catch (_) {
       BetterPlayerUtils.log("Failed to parse subtitle line: $scanner");
       return BetterPlayerSubtitle._();
     }
@@ -97,12 +102,13 @@ class BetterPlayerSubtitle {
       }
 
       final result = Duration(
-          hours: int.tryParse(component[0])!,
-          minutes: int.tryParse(component[1])!,
-          seconds: int.tryParse(secsAndMillsSplit[0])!,
-          milliseconds: int.tryParse(secsAndMillsSplit[1])!);
+        hours: int.tryParse(component[0])!,
+        minutes: int.tryParse(component[1])!,
+        seconds: int.tryParse(secsAndMillsSplit[0])!,
+        milliseconds: int.tryParse(secsAndMillsSplit[1])!,
+      );
       return result;
-    } catch (exception) {
+    } on Exception catch (_) {
       BetterPlayerUtils.log("Failed to process value: $value");
       return const Duration();
     }
