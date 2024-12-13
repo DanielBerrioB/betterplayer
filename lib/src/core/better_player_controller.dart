@@ -283,9 +283,7 @@ class BetterPlayerController {
     if (defaultSubtitle == null) return;
 
     ///Setup subtitles (none is default)
-    setupSubtitleSource(
-        defaultSubtitle ?? _betterPlayerSubtitlesSourceList.last,
-        sourceInitialize: true);
+    setupSubtitleSource(defaultSubtitle, sourceInitialize: true);
   }
 
   ///Check if given [betterPlayerDataSource] is HLS / DASH-type data source.
@@ -520,7 +518,6 @@ class BetterPlayerController {
           throw ArgumentError("Couldn't create file from memory.");
         }
         break;
-
       default:
         throw UnimplementedError(
             "${betterPlayerDataSource.type} is not implemented");
