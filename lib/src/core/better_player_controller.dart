@@ -518,10 +518,7 @@ class BetterPlayerController {
           throw ArgumentError("Couldn't create file from memory.");
         }
         break;
-      default:
-        throw UnimplementedError(
-            "${betterPlayerDataSource.type} is not implemented");
-    }
+      }
     await _initializeVideo();
   }
 
@@ -1039,6 +1036,7 @@ class BetterPlayerController {
   ///Setup overridden fit.
   void setOverriddenFit(BoxFit fit) {
     _overriddenFit = fit;
+    _postControllerEvent(BetterPlayerControllerEvent.setFit);
   }
 
   ///Get fit used in current video. If fit is null, then fit from
