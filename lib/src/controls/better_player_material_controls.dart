@@ -167,22 +167,22 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
       children: [
         const Spacer(),
         if (_controlsConfiguration.enableOverflowMenu)
-          AnimatedOpacity(
-            opacity: controlsNotVisible ? 0.0 : 1.0,
-            duration: _controlsConfiguration.controlsHideTime,
-            onEnd: _onPlayerHide,
-            child: SizedBox(
-              height: _controlsConfiguration.controlBarHeight,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (_controlsConfiguration.enablePip)
-                    _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide)
-                  else
-                    const SizedBox(),
-                  _buildMoreButton(),
-                ],
+          Expanded(
+            child: AnimatedOpacity(
+              opacity: controlsNotVisible ? 0.0 : 1.0,
+              duration: _controlsConfiguration.controlsHideTime,
+              onEnd: _onPlayerHide,
+              child: SizedBox(
+                height: _controlsConfiguration.controlBarHeight,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (_controlsConfiguration.enablePip)
+                      _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide),
+                    _buildMoreButton(),
+                  ],
+                ),
               ),
             ),
           ),
