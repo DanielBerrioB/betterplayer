@@ -247,7 +247,6 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
     ),
   );
 
-
   Material _buildCloseButton(
       Color backgroundColor,
       Color iconColor,
