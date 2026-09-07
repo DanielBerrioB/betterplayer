@@ -61,7 +61,7 @@ Add the dependency in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  better_player_plus: ^1.1.2
+  better_player_plus: ^1.4.1
 ```
 
 Import the package:
@@ -109,23 +109,20 @@ welcome — please open issues or pull requests.
 
 Apache 2.0 — see [`LICENSE`](LICENSE).
 
-### Recent Updates (v1.1.2)
+### Recent Updates (v1.4.1)
 
-- **Code Quality Improvements**: Fixed missing type annotations and improved static analysis
-  compliance
-- **Project Metadata**: Updated iOS podspec with proper project information and version consistency
-- **Dependency Management**: Fixed example app dependency version constraints for better stability
-- **Documentation**: Enhanced project documentation and version consistency across all files
+- **iOS Memory Management**: Fixed native player memory leak on dispose (unregistered `dataSourceDict`, broke `FlutterEventChannel` retain cycle, detached player layers, cleaned up notification center) and fixed a latent KVO crash on deallocation by weakly tracking `observedItem`
+- **Android**: Upgraded Media3 dependencies to `1.11.0`; added Built-in Kotlin support for AGP 9.0+ while retaining backward compatibility with Flutter 3.41.0+ and AGP < 9
+- **Dependency Cleanup**: Inlined and modernized `visibility_detector` to remove the unmaintained external dependency
+- **Package Size**: Optimized pub.dev archive size by excluding heavy example native runners and test media in `.pubignore`
 
-### Previous Updates (v1.1.1)
+### Previous Updates (v1.2.0)
 
-- **iOS Migration**: Complete migration from Objective-C to Swift for better maintainability and
-  modern iOS development practices
-- **Android Media3 1.8.0**: Full migration to the latest Android Media3 player with enhanced
-  performance and features
-- **Deprecated API Fixes**: Removed deprecated GLKit dependency and updated UIApplication.keyWindow
-  usage
-- **Improved Compatibility**: Enhanced iOS 13+ support with proper backward compatibility
+- **SDK Update**: Dart SDK `>=3.11.0`, Flutter SDK `>=3.41.0`, Android Media3 `1.10.0`
+- **iOS Fixes**: Preserved playback speed across seek/pause/resume; fixed AVPlayer aspect ratio issues; added wakelock (disable auto-sleep) support
+- **Audio**: Fixed audio track override not being cleared before applying a new one; improved HLS default audio source selection
+- **Controls**: Fixed `controlsVisibilityStream` feedback loop and auto-hide emit behaviour
+- **Code Quality**: Zero `dart analyze` issues — all errors, warnings and info resolved
 
 ### Credits
 

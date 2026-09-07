@@ -23,6 +23,7 @@ class BetterPlayerSubtitlesDrawer extends StatefulWidget {
 
 class _BetterPlayerSubtitlesDrawerState extends State<BetterPlayerSubtitlesDrawer> {
   final RegExp htmlRegExp =
+      // Raw string kept for clarity even though no special sequences are present
       // ignore: unnecessary_raw_strings
       RegExp(r'<[^>]*>', multiLine: true);
   late TextStyle _innerTextStyle;
@@ -49,7 +50,7 @@ class _BetterPlayerSubtitlesDrawerState extends State<BetterPlayerSubtitlesDrawe
       _configuration = setupDefaultConfiguration();
     }
 
-    widget.betterPlayerController.videoPlayerController!.addListener(_updateState);
+    widget.betterPlayerController.videoPlayerController?.addListener(_updateState);
 
     _outerTextStyle = TextStyle(
       fontSize: _configuration!.fontSize,
@@ -71,7 +72,7 @@ class _BetterPlayerSubtitlesDrawerState extends State<BetterPlayerSubtitlesDrawe
 
   @override
   void dispose() {
-    widget.betterPlayerController.videoPlayerController!.removeListener(_updateState);
+    widget.betterPlayerController.videoPlayerController?.removeListener(_updateState);
     _visibilityStreamSubscription.cancel();
     super.dispose();
   }
@@ -80,7 +81,7 @@ class _BetterPlayerSubtitlesDrawerState extends State<BetterPlayerSubtitlesDrawe
   void _updateState() {
     if (mounted) {
       setState(() {
-        _latestValue = widget.betterPlayerController.videoPlayerController!.value;
+        _latestValue = widget.betterPlayerController.videoPlayerController?.value;
       });
     }
   }

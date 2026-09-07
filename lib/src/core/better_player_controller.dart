@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:better_player_plus/src/configuration/better_player_controller_event.dart';
 import 'package:better_player_plus/src/core/better_player_utils.dart';
+import 'package:better_player_plus/src/enum/aspect_enum.dart';
 import 'package:better_player_plus/src/subtitles/better_player_subtitle.dart';
 import 'package:better_player_plus/src/subtitles/better_player_subtitles_factory.dart';
 import 'package:better_player_plus/src/video_player/video_player.dart';
@@ -261,7 +262,7 @@ class BetterPlayerController {
 
     ///Process data source
     await _setupDataSource(betterPlayerDataSource);
-    setTrack(BetterPlayerAsmsTrack.defaultTrack());
+    await setTrack(BetterPlayerAsmsTrack.defaultTrack());
   }
 
   ///Configure subtitles based on subtitles source.
@@ -501,6 +502,7 @@ class BetterPlayerController {
   ///run on player start.
   Future<void> _initializeVideo() async {
     unawaited(setLooping(betterPlayerConfiguration.looping));
+    unawaited(updateAspectRatioIOS(betterPlayerConfiguration.aspectRatioIOS ?? AspectRatioTypeIOS.fill));
     if (_videoEventStreamSubscription != null) {
       unawaited(_videoEventStreamSubscription!.cancel());
       _videoEventStreamSubscription = null;
@@ -812,7 +814,7 @@ class BetterPlayerController {
         return;
       }
 
-      _nextVideoTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+      _nextVideoTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
         if (_nextVideoTime == 1) {
           timer.cancel();
           _nextVideoTimer = null;
@@ -843,10 +845,13 @@ class BetterPlayerController {
 
   ///Setup track parameters for currently played video. Can be only used for HLS or DASH
   ///data source.
-  void setTrack(BetterPlayerAsmsTrack track) {
+  Future<void> setTrack(BetterPlayerAsmsTrack track) async {
     if (videoPlayerController == null) {
       throw StateError('The data source has not been initialized');
     }
+
+    await videoPlayerController!.setTrackParameters(track.width, track.height, track.bitrate);
+    _betterPlayerAsmsTrack = track;
     _postEvent(
       BetterPlayerEvent(
         BetterPlayerEventType.changedTrack,
@@ -861,9 +866,7 @@ class BetterPlayerController {
         },
       ),
     );
-
-    videoPlayerController!.setTrackParameters(track.width, track.height, track.bitrate);
-    _betterPlayerAsmsTrack = track;
+    _postControllerEvent(BetterPlayerControllerEvent.changedTrack);
   }
 
   ///Check if player can be played/paused automatically
@@ -980,7 +983,6 @@ class BetterPlayerController {
   ///[_overriddenAspectRatio] will be used.
   double? getAspectRatio() => _overriddenAspectRatio ?? betterPlayerConfiguration.aspectRatio;
 
-  // ignore: use_setters_to_change_properties
   ///Setup overridden fit.
   void setOverriddenFit(BoxFit fit) {
     _overriddenFit = fit;
@@ -991,6 +993,13 @@ class BetterPlayerController {
   ///BetterPlayerConfiguration will be used. Otherwise [_overriddenFit] will be
   ///used.
   BoxFit getFit() => _overriddenFit ?? betterPlayerConfiguration.fit;
+
+  Future<void>? updateAspectRatioIOS(AspectRatioTypeIOS aspectRatio) {
+    if (videoPlayerController == null) {
+      throw StateError('The data source has not been initialized');
+    }
+    return videoPlayerController!.setAspectRatio(aspectRatio.name);
+  }
 
   ///Enable Picture in Picture (PiP) mode. [betterPlayerGlobalKey] is required
   ///to open PiP mode in iOS. When device is not supported, PiP mode won't be
@@ -1049,7 +1058,6 @@ class BetterPlayerController {
     return videoPlayerController!.disablePictureInPicture();
   }
 
-  // ignore: use_setters_to_change_properties
   ///Set GlobalKey of BetterPlayer. Used in PiP methods called from controls.
   void setBetterPlayerGlobalKey(GlobalKey betterPlayerGlobalKey) {
     _betterPlayerGlobalKey = betterPlayerGlobalKey;
@@ -1145,7 +1153,7 @@ class BetterPlayerController {
 
   ///Clear all cached data. Video player controller must be initialized to
   ///clear the cache.
-  Future<void> clearCache() async => VideoPlayerController.clearCache();
+  Future<void> clearCache() => VideoPlayerController.clearCache();
 
   ///Build headers map that will be used to setup video player controller. Apply
   ///DRM headers if available.
@@ -1165,7 +1173,7 @@ class BetterPlayerController {
   ///On iOS, the whole file will be downloaded, since [maxCacheFileSize] is
   ///currently not supported on iOS. On iOS, the video format must be in this
   ///list: https://github.com/sendyhalim/Swime/blob/master/Sources/MimeType.swift
-  Future<void> preCache(BetterPlayerDataSource betterPlayerDataSource) async {
+  Future<void> preCache(BetterPlayerDataSource betterPlayerDataSource) {
     final cacheConfig =
         betterPlayerDataSource.cacheConfiguration ?? const BetterPlayerCacheConfiguration(useCache: true);
 
@@ -1185,7 +1193,7 @@ class BetterPlayerController {
 
   ///Stop pre cache for given [betterPlayerDataSource]. If there was no pre
   ///cache started for given [betterPlayerDataSource] then it will be ignored.
-  Future<void> stopPreCache(BetterPlayerDataSource betterPlayerDataSource) async =>
+  Future<void> stopPreCache(BetterPlayerDataSource betterPlayerDataSource) =>
       VideoPlayerController.stopPreCache(betterPlayerDataSource.url, betterPlayerDataSource.cacheConfiguration?.key);
 
   /// Sets the new [betterPlayerControlsConfiguration] instance in the
@@ -1225,7 +1233,7 @@ class BetterPlayerController {
 
       ///Delete files async
       for (final file in _tempFiles) {
-        file.delete();
+        file.delete().ignore();
       }
     }
   }
