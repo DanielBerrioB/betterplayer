@@ -39,7 +39,6 @@ abstract class VideoPlayerPlatform {
   /// Defaults to [MethodChannelVideoPlayer].
   static VideoPlayerPlatform get instance => _instance;
 
-  // TODO(amirh): Extract common platform interface logic.
   // https://github.com/flutter/flutter/issues/43368
   static set instance(VideoPlayerPlatform instance) {
     if (!instance.isMock) {
@@ -113,6 +112,10 @@ abstract class VideoPlayerPlatform {
   /// Sets the video speed to a range between 0.0 and 2.0
   Future<void> setSpeed(int? textureId, double speed) {
     throw UnimplementedError('setSpeed() has not been implemented.');
+  }
+
+  Future<void> setAspectRatio(int? textureId, String aspectRatio) {
+    throw UnimplementedError('setAspectRatio() has not been implemented.');
   }
 
   /// Sets the video track parameters (used to select quality of the video)

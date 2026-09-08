@@ -1,3 +1,4 @@
+// Navigator push returns a future that is intentionally not awaited in callbacks
 // ignore_for_file: discarded_futures
 
 import 'dart:async';
@@ -8,7 +9,6 @@ import 'package:better_player_plus/src/core/better_player_utils.dart';
 import 'package:better_player_plus/src/core/better_player_with_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 ///Widget which uses provided controller to render video player.
@@ -126,7 +126,6 @@ class _BetterPlayerState extends State<BetterPlayer> with WidgetsBindingObserver
     }
   }
 
-  // ignore: avoid_void_async
   Future<void> onFullScreenChanged() async {
     final controller = widget.controller;
     if (controller.isFullScreen && !_isFullScreen) {
