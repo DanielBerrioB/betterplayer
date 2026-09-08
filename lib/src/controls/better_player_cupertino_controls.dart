@@ -71,7 +71,6 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
         ? _controlsConfiguration.controlBarHeight
         : _controlsConfiguration.controlBarHeight + 10;
     const buttonPadding = 10.0;
-    final isFullScreen = _betterPlayerController?.isFullScreen ?? false;
 
     _wasLoading = isLoading(_latestValue);
     final controlsColumn = Column(
@@ -103,7 +102,9 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
       },
       child: AbsorbPointer(
         absorbing: controlsNotVisible,
-        child: isFullScreen ? SafeArea(child: controlsColumn) : controlsColumn,
+        // Was `SafeArea`, which is inert under `immersiveSticky` — see
+        // fullScreenSafeArea.
+        child: fullScreenSafeArea(controlsColumn),
       ),
     );
   }
@@ -115,7 +116,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
   }
 
   void _dispose() {
-    _controller!.removeListener(_updateState);
+    _controller?.removeListener(_updateState);
     _hideTimer?.cancel();
     _expandCollapseTimer?.cancel();
     _initTimer?.cancel();
@@ -499,6 +500,9 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
       });
     }
     _controlsVisibilityStreamSubscription = _betterPlayerController!.controlsVisibilityStream.listen((state) {
+      if (controlsNotVisible == !state) {
+        return;
+      }
       changePlayerControlsNotVisible(!state);
 
       if (!controlsNotVisible) {
@@ -589,6 +593,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
 
   void _onPlayerHide() {
     _betterPlayerController!.toggleControlsVisibility(!controlsNotVisible);
+    _betterPlayerController!.setControlsVisibility(!controlsNotVisible);
     widget.onControlsVisibilityChanged(!controlsNotVisible);
   }
 
